@@ -79,6 +79,8 @@ packages=(
     "power-profiles-daemon"
     "python-pywalfox"
     "vlc"
+    "ags-hyprpanel-git"
+    "wayvnc"
 )
 
 GREEN='\033[0;32m'
