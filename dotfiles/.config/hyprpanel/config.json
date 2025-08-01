@@ -1,0 +1,89 @@
+{
+  "bar.customModules.updates.pollingInterval": 1440000,
+  "menus.transitionTime": 200,
+  "theme.bar.scaling": 80,
+  "theme.bar.menus.monochrome": false,
+  "wallpaper.pywal": true,
+  "wallpaper.image": "/home/mukunya/.config/ml4w/wallpapers/3d-tech.jpg",
+  "wallpaper.enable": false,
+  "menus.clock.time.military": false,
+  "menus.clock.time.hideSeconds": false,
+  "bar.clock.format": "%a %b %d  %H:%M:%S",
+  "theme.bar.buttons.media.enableBorder": false,
+  "theme.matugen": true,
+  "theme.matugen_settings.scheme_type": "content",
+  "theme.matugen_settings.variation": "standard_1",
+  "bar.layouts": {
+    "0": {
+      "left": [
+        "dashboard",
+        "workspaces"
+      ],
+      "middle": [
+        "windowtitle"
+      ],
+      "right": [
+        "media",
+        "cava",
+        "network",
+        "bluetooth",
+        "systray",
+        "clock",
+        "notifications"
+      ]
+    },
+    "*": {
+      "left": [
+        "dashboard",
+        "workspaces"
+      ],
+      "middle": [
+        "windowtitle"
+      ],
+      "right": [
+        "volume",
+        "network",
+        "bluetooth",
+        "systray",
+        "clock",
+        "notifications"
+      ]
+    }
+  },
+  "menus.dashboard.powermenu.sleep": "systemctl suspend",
+  "bar.volume.rightClick": "",
+  "bar.workspaces.showApplicationIcons": true,
+  "bar.workspaces.showWsIcons": true,
+  "bar.launcher.rightClick": "wlogout",
+  "bar.launcher.autoDetectIcon": false,
+  "theme.bar.buttons.dashboard.enableBorder": false,
+  "bar.customModules.cava.lowCutoff": 20,
+  "bar.customModules.cava.highCutoff": 20000,
+  "bar.customModules.cava.stereo": false,
+  "bar.customModules.cava.bars": 32,
+  "bar.customModules.cava.samplerate": 96000,
+  "bar.customModules.cava.noiseReduction": 0,
+  "bar.customModules.cava.leftClick": "menu:audio",
+  "bar.customModules.cava.rightClick": "pavucontrol",
+  "bar.customModules.cava.middleClick": "helvum",
+  "bar.customModules.cava.channels": 1,
+  "bar.customModules.cava.showActiveOnly": false,
+  "theme.matugen_settings.contrast": 0.55,
+  "theme.bar.menus.menu.notifications.scaling": 80,
+  "bar.autoHide": "fullscreen",
+  "bar.network.label": false,
+  "bar.network.rightClick": "",
+  "bar.customModules.cava.framerate": 24,
+  "bar.media.truncation_size": 32,
+  "bar.network.truncation_size": 20,
+  "theme.bar.buttons.volume.enableBorder": false,
+  "bar.customModules.cava.scrollUp": "hyprpanel vol +5",
+  "bar.customModules.cava.scrollDown": "hyprpanel vol -5",
+  "theme.bar.location": "top",
+  "theme.bar.layer": "top",
+  "bar.customModules.storage.paths": [
+    "/"
+  ],
+  "theme.font.name": "Ubuntu Nerd Font",
+  "theme.font.label": "Iosevka ThinBlocks Bold Expanded"
+}
