@@ -28,3 +28,9 @@
     "text" : "Power Off",
     "keybind" : "s"
 }
+{
+    "label" : "hibernate",
+    "action" : "~/.config/hypr/scripts/power.sh hibernate",
+    "text" : "Hibernate",
+    "keybind" : "h"
+}
