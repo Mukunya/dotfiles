@@ -21,7 +21,7 @@ packages=(
     "noto-fonts-extra"
     "xdg-desktop-portal-hyprland"
     "libnotify"
-    "kitty"
+    "alacrity"
     "qt5-wayland"
     "qt6-wayland"
     "uwsm"
@@ -42,7 +42,6 @@ packages=(
     "imagemagick"
     "jq"
     "xclip"
-    "kitty"
     "neovim"
     "htop"
     "blueman"
@@ -51,8 +50,6 @@ packages=(
     "cliphist"
     "nwg-look"
     "qt6ct"
-    "waybar"
-    "rofi-wayland"
     "polkit-gnome"
     "zsh"
     "fzf"
@@ -60,7 +57,6 @@ packages=(
     "papirus-icon-theme"
     "breeze"
     "flatpak"
-    "swaync"
     "gvfs"
     "wlogout"
     "hyprshade"
@@ -81,6 +77,9 @@ packages=(
     "vlc"
     "ags-hyprpanel-git"
     "wayvnc"
+    "ulauncher"
+    "btop"
+    "neovim"
 )
 
 GREEN='\033[0;32m'
