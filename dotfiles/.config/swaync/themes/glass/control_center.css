@@ -1,5 +1,5 @@
 /* Import Matugen generated colors */
-@import 'colors.css';
+@import '../../colors.css';
 
 /* === Derived dynamic colors === */
 @define-color base alpha(@surface, 0.5);
@@ -26,13 +26,23 @@
   transition: 200ms;
 }
 
+#window {
+    padding:20px;
+
+}
+
 /* === Control Center Container === */
 .control-center {
-  background: @base;
-  border-radius: 10px;
-  border: 2px solid @bordercolor;
-  padding: 8px 8px 0 8px;
-}
+    background-color: @surface;
+    border-radius: 12px;
+    background: radial-gradient(circle at 50% 250%, @surface, @surface_dim) padding-box,
+        linear-gradient(#FFFFFF,@on_primary) border-box;
+    border: 1px solid transparent;	
+    opacity:0.7;
+    margin:10px;
+    margin-right:18px;
+    box-shadow: 0 1px 10px 1px rgba(0, 0, 0, 0.3), 0 1px 10px 1px rgba(0, 0, 0, 0.7),
+      0 2px 10px 2px rgba(0, 0, 0, 0.3);}
 
 /* === Buttons grid === */
 .widget-buttons-grid {
@@ -45,7 +55,7 @@
   padding: 1.3rem 4rem;
   background: @buttoncolor;
   color: @on_primary_fixed;
-  border-radius: 7px;
+  border-radius: 8px;
   border: 2px solid @bordercolor;
   font-size: 15em;
 }
@@ -65,7 +75,7 @@
 .widget-volume {
   padding: 12px 16px;
   margin: 0px 12px 12px 12px;
-  border-radius: 7px;
+  border-radius: 8px;
   background: @surface_custom;
 }
 
@@ -144,7 +154,7 @@
 
 .widget-title button {
   background: @surface_container;
-  border-radius: 5px;
+  border-radius: 8px;
   padding: 4px 16px;
 }
 
@@ -160,7 +170,7 @@
 
 .widget-dnd > switch {
   color: @text;
-  background: @surface_container;
+  background: @buttoncolor;
   border-radius: 5px;
   box-shadow: none;
 }
@@ -185,28 +195,22 @@
 }
 
 /* === Notifications === */
-.control-center .notification-row .notification-background,
 .control-center .notification-row .notification-background .notification.critical {
-  background-color: @surface_container_high;
+  background-color: @surface_container;
   border-radius: 10px;
-  margin: 10px 0px;
-  padding: 8px 8px 8px 16px;
+  margin: 5px 0px;
+  padding: 15px;
   border: 2px solid @bordercolor;
   min-height: 2.5em;
 }
 
-.control-center .notification-row .notification-background .notification.critical {
-  background: @error_container;
-  color: @on_error_container;
-}
-
 .control-center .notification-row .notification-background .close-button {
   background-color: @hoverbutton;
-  border-radius: 20px;
+  border-radius: 5px;
   color: @text;
-  padding: 2px;
+  padding: 5px;
 }
-z
+
 .control-center .notification-row .notification-background .close-button:hover {
   background-color: @activecolor;
 }
@@ -231,7 +235,6 @@ trough highlight {
 .notification-group-icon {
   padding: 0px;
 }
-
 
 .notification-group-collapse-button,
 .notification-group-close-all-button {
