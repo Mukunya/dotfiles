@@ -71,6 +71,7 @@ packages=(
     # Fonts
     "otf-font-awesome"
     "ttf-firacode-nerd"
+    "tty-clock"
 )
 
 _isInstalled() {
@@ -272,6 +273,12 @@ source $SCRIPT_DIR/_fonts.sh
 # --------------------------------------------------------------
 
 source $SCRIPT_DIR/_icons.sh
+
+# --------------------------------------------------------------
+# Create XDG Directories
+# --------------------------------------------------------------
+
+xdg-user-dirs-update
 
 # --------------------------------------------------------------
 # Finish
