@@ -1,6 +1,6 @@
 // .vitepress/config.ts
 export default {
-  title: 'ML4W Dotfiles for Hyprland Wiki',
+  title: 'ML4W OS - Dotfiles for Hyprland Wiki',
   description: 'An advanced and full-featured configuration for the dynamic tiling window manager Hyprland',
   base: "/dotfiles/",
   lastUpdated: true,
@@ -11,7 +11,7 @@ export default {
   ],
 
   themeConfig: {
-    siteTitle: "ML4W Hyprland Dotfiles ",
+    siteTitle: "ML4W OS Hyprland",
     logo: "/ml4w.svg",
     outline: "deep",
     docsDir: "/docs",
@@ -28,7 +28,7 @@ export default {
         activeMatch: "/showcases/",
       },
      {
-        text: "2.9.9.4",
+        text: "2.10.0",
         items: [
           {
             text: 'Changelog',
@@ -94,7 +94,6 @@ export default {
             { text: "Launch Hyprland", link: "/usage/launch" },
             { text: "Update", link: "/getting-started/update" },
             { text: "Uninstall", link: "/getting-started/uninstall" },
-            { text: "Migration", link: "/getting-started/migrate" },
             { text: "Dependencies", link: "/getting-started/dependencies" },
           ],
         },
@@ -177,7 +176,7 @@ export default {
       message: "Released under the GPL License",
       copyright: `<a href="https://ml4w.com" target="_blank">
         <img src="/dotfiles/ml4w.png" alt="ML4W" />
-        Copyright © 2025 Stephan Raabe
+        Copyright © 2026 Stephan Raabe
       </a>`,
     },
 

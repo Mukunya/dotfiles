@@ -1,4 +1,4 @@
-# Uninstall the ML4W Dotfiles
+# Uninstall the ML4W OS
 
 The uninstallation requires some manual steps. It requires the removal of the dotfiles, the restore of configuration files from the backup and the unstallation of dependencies.
 
@@ -10,13 +10,13 @@ The uninstallation requires some manual steps. It requires the removal of the do
 
 ## Remove the Hyprland configuration
 
-Logout from the ML4W dotfiles and open another desktop environment (if available on your system) or switch to a tty. 
+Logout from the ML4W OS and open another desktop environment (if available on your system) or switch to a tty. 
 
 ```sh
 cd ~/.config # CD into the config folder
 rm -rf hypr # Remove the current symlink to the ML4W hypr config
 ```
-If you're on tty, you can login again to Hyprland now and you should see the default configuration. Please not that you need to open kitty now with SUPER+Q.
+If you're on tty, you can login again to Hyprland now and you should see the default configuration. Please note that you need to open kitty now with SUPER+Q.
 
 ## Restore your first backup
 

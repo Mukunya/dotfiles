@@ -1,7 +1,25 @@
+Version 2.10.0
+--------------------------------------------------------
+- Project renamed to ML4W OS
+- Live ISO and installation script available (BETA)
+- btop is now using the matugen generated color theme
+- New Calendar App with the possibility to add events. CREDITS TO https://github.com/defaltastra
+- Cleaned up Welcome and Settings App
+
+Version 2.9.9.6
+--------------------------------------------------------
+- Glass and Transparent theme updated for Blur decoration. Can be set in the settings app.
+- Several fixes for Fedora 43 setup script
+- Global font set in nwg-look
+- Fix Quicklinks module in glass and transparent waybar theme
+
 Version 2.9.9.5
 --------------------------------------------------------
-- Replace copr for Hyprland on Fedora. Please run the setup script again with the Dotfiles Installer
-- New Glass Center Waybar Theme witn the Workspace Selector in the center.
+- New windowrule syntax required for Hyprland 0.53.x
+- swww is the new default wallpaper engine. Please switch from hyprpaper to swww in waypaper in case of an Dotfiles update.
+- New Global Theme "transparent"
+- copr for Hyprland on Fedora replaced. Please run the setup script again with the Dotfiles Installer.
+- New Glass Center Waybar Theme with workspace selector in the center.
 
 Version 2.9.9.4
 --------------------------------------------------------

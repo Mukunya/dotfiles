@@ -1,6 +1,8 @@
-# Wallpaper with waypaper (hyprpaper and swww as option)
+# Wallpaper with waypaper
 
 You can select a wallpaper with Waypaper. You can start Waypaper from the App Launcher or from the sidebar.
+
+The wallpaper engines swww and hyprpaper are installed. swww is the dafault wallpaper engine.
 
 > [!NOTE]
 > You can install more wallpapers from the ML4W Wallpaper Repository: https://github.com/mylinuxforwork/wallpaper
@@ -17,14 +19,12 @@ You can select a wallpaper with Waypaper. You can start Waypaper from the App La
 
 > In waypaper you can select a wallpaper from any folder of your system.
 
-> The default wallpaper engine is **`hyprpaper`**. But you can optionally install **swww** manually and switch in the ML4W Dotfiles Settings app from hyprpaper to swww.  
+> The default wallpaper engine is **`hyprpaper`**. But you can optionally install **swww** manually and switch in the ML4W Settings app from hyprpaper to swww.  
 
->Open the ML4W Dotfiles Settings app and select the tab system. At the top you can find the Wallpaper Engine Selector.
+>Open the ML4W Settings app and select the tab system. At the top you can find the Wallpaper Engine Selector.
 
 > [!NOTE]  
 > A logout and login is required to activate the new wallpaper application.
-
-The hyprpaper engine uses a template stored in `dotfiles/.settings/hyprpaper.tpl`. You can add additional configurations there. The `WALLPAPER` placeholder will be replaced with the current wallpaper.
 
 ## Wallpaper Automation
 

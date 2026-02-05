@@ -1,6 +1,6 @@
 # Screenshots
 
-The ML4W Dotfiles are shipped with grimblast. You can open the screenshot menu with `SUPER + PRINT`
+The ML4W OS are shipped with grimblast. You can open the screenshot menu with `SUPER + PRINT`
 
 Please follow the screenshot wizard.
 
@@ -10,13 +10,13 @@ Please follow the screenshot wizard.
 
 By default screenshots will be stored in the `$HOME/Pictures` directory. 
 
-To change the screenshot folder, open `~/.config/ml4w/settings/screenshot-folder.sh`
+To change the screenshot folder, open `~/.config/ml4w/settings/screenshot-folder`
 
 ## Change the screenshot filename format
 
 By default screenshots will be stored in the `$HOME/Pictures` directory. 
 
-To change the screenshot folder, open `~/.config/ml4w/settings/screenshot-filename.sh`
+To change the screenshot folder, open `~/.config/ml4w/settings/screenshot-filename`
 
 ## Screenshot Editor
 
@@ -24,7 +24,7 @@ If you select edit as the last option the created screenshot will be opened in P
 
 ![image](/screenshot1.png)
 
-You can change the screenshot editor in the ML4W Settings App:
+You can change the screenshot editor in the ML4W Settings App or in the file `~/.config/ml4w/settings/screenshot-editor`:
 
 ![image](/screenshot2.png)
 

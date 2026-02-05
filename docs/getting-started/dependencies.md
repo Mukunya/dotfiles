@@ -1,6 +1,6 @@
 # Dependencies
 
-You can install the ML4W Dotfiles for Hyprland on every Linux distribution if you install the following packages upfront.
+You can install the ML4W OS Hyprland on every Linux distribution if you install the following packages upfront.
 
 > [!NOTE]
 > The package names may differ per distribution.
@@ -12,7 +12,7 @@ gum
 rsync
 git
 figlet
-xdg-user-dirs    
+xdg-user-dirs
 hyprland
 hyprpaper
 hyprlock
@@ -42,11 +42,14 @@ htop
 blueman
 grim
 slurp
+tesseract
+tesseract-data-eng (or tesseract-langpack-eng on Fedora, tesseract-ocr-traineddata-eng on openSUSE)
+wl-clipboard
 cliphist
 nwg-look
 qt6ct
 waybar
-rofi-wayland
+rofi
 polkit-gnome
 zsh
 zsh-completions

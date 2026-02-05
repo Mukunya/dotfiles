@@ -68,9 +68,11 @@ packages=(
     "ulauncher"
     "btop"
     "neovim"
+    "tesseract-data-eng"
     # Fonts
     "otf-font-awesome"
     "ttf-firacode-nerd"
+    "ttf-jetbrains-mono-nerd"
     "tty-clock"
 )
 
