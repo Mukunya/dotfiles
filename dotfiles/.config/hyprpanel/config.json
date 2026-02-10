@@ -17,18 +17,26 @@
     "0": {
       "left": [
         "dashboard",
-        "workspaces"
+        "workspaces",
+        "ram",
+        "cpu",
+        "cputemp",
+        "storage",
+        "netstat",
+        "media"
       ],
       "middle": [
         "windowtitle"
       ],
       "right": [
-        "media",
         "cava",
         "network",
         "bluetooth",
+        "hyprsunset",
+        "hypridle",
         "systray",
         "clock",
+        "updates",
         "notifications"
       ]
     },
@@ -61,7 +69,7 @@
   "bar.customModules.cava.highCutoff": 20000,
   "bar.customModules.cava.stereo": false,
   "bar.customModules.cava.bars": 32,
-  "bar.customModules.cava.samplerate": 96000,
+  "bar.customModules.cava.samplerate": 48000,
   "bar.customModules.cava.noiseReduction": 0,
   "bar.customModules.cava.leftClick": "menu:audio",
   "bar.customModules.cava.rightClick": "pavucontrol",
@@ -85,5 +93,18 @@
     "/"
   ],
   "theme.font.name": "Ubuntu Nerd Font",
-  "theme.font.label": "Iosevka ThinBlocks Bold Expanded"
+  "theme.font.label": "Iosevka ThinBlocks Bold Expanded",
+  "bar.customModules.cpuTemp.sensor": "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp1_input",
+  "bar.customModules.storage.labelType": "used/total",
+  "bar.customModules.storage.units": "auto",
+  "bar.customModules.cpuTemp.pollingInterval": 200,
+  "bar.customModules.cpu.pollingInterval": 200,
+  "bar.customModules.ram.pollingInterval": 200,
+  "bar.customModules.ram.labelType": "used/total",
+  "bar.customModules.ram.round": false,
+  "bar.customModules.netstat.pollingInterval": 200,
+  "bar.customModules.updates.updateTooltipCommand": "/usr/share/hyprpanel/scripts/checkUpdates.sh -arch -tooltip",
+  "bar.customModules.updates.updateCommand": "/usr/share/hyprpanel/scripts/checkUpdates.sh -arch",
+  "bar.customModules.updates.leftClick": "$TERMINAL -e /usr/share/hyprpanel/scripts/runUpdates.sh -arch",
+  "bar.customModules.cava.spaceCharacter": " "
 }
