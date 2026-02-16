@@ -43,7 +43,7 @@ while IFS= read -r EVT; do
         client-disconnected)
             hyprctl reload
             hyprctl dispatch movecursor 1920 1080
-            hyprctl dispatch exec hyprlock
+            hyprctl dispatch exec swaylock
             hyprctl dispatch exec systemctl hybrid-sleep
             ;;
         wayvnc-shutdown)

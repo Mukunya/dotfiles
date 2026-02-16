@@ -15,7 +15,7 @@ general=(
 
 hyprland=(
     "hyprpaper"
-    "hyprlock"
+    "swaylock-effects"
     "hypridle"
     "hyprpicker"
     "xdg-desktop-portal-hyprland"
