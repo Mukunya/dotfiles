@@ -48,7 +48,7 @@ fi
 if [[ "$1" == "lock" ]]; then
 	echo ":: Lock"
 	sleep 0.5
-	swaylock
+	hyprlock
 fi
 
 if [[ "$1" == "reboot" ]]; then
