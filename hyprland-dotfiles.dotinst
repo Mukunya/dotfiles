@@ -2,13 +2,12 @@
 	"name": "ML4W OS - Dotfiles for Hyprland (ROLLING RELEASE)",
 	"id": "com.ml4w.dotfiles",
 	"description": "Advanced configuration for the dynamic tiling window manager Hyprland",
-	"version":"2.10.0",
+	"version":"2.12.2",
 	"author": "Stephan Raabe",
-	"homepage": "https://mylinuxforwork.github.io/dotfiles/",
-	"dependencies": "https://mylinuxforwork.github.io/dotfiles/getting-started/dependencies",
-	"source": "https://github.com/Mukunya/dotfiles.git",
+	"homepage": "https://ml4w.com/os/",
+	"dependencies": "https://ml4w.com/os/getting-started/dependencies",
+	"source": "https://github.com/mylinuxforwork/dotfiles.git",
 	"subfolder": "dotfiles",
-	"setupscript":"setup/setup.sh",
 	"restore":[
 		{
 			"title":"ML4W Settings",
@@ -26,8 +25,18 @@
 			"value":true
 		},
 		{
+			"title":"NWG-Displays",
+			"source":".config/hypr/monitors.conf",
+			"value":true
+		},
+		{
 			"title":"Waypaper",
 			"source":".config/waypaper",
+			"value":true
+		},
+		{
+			"title":"Hyprsunset",
+			"source":".config/hypr/hyprsunset.conf",
 			"value":true
 		},
 		{
@@ -90,8 +99,5 @@
 			"source":".gtkrc-2.0",
 			"value":true
 		}
-	],
-	"settings":[
-		
 	]
 }

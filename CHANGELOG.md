@@ -1,3 +1,52 @@
+Version 2.12.2
+--------------------------------------------------------
+- Update matugen to the latest version
+- Using awww as default wallpaper engine
+- Transition effects can be set in the Settings App and Appearance
+- New Quickshell based wallpaper selector. Toggle with SUPER+CTRL+W
+- Waypaper can be selected optionally in the Settings App and Default Apps but must be installed separately.
+
+Version 2.12.1
+--------------------------------------------------------
+- Replaced swww with awww
+- Installation of waypaper-git to support awww and latest hyprpaper
+- Compatible with Hyprland 0.54.3
+- Welcome App url fixes
+
+Version 2.12.0
+--------------------------------------------------------
+- Flatpaks ML4W Welcome App, Settings App, Sidebar App and Calendar App replaced with Quickshell
+- wlogout replaced with a Quickshell widget
+- ML4W Hyprland Settings app can be installed optionally from the Welcome app or as described here: https://github.com/mylinuxforwork/hyprland-settings
+- New snapshot script for timeshift and grub-btrfs ~/.config/ml4w/scripts/ml4w-snapshot supporting Arch, Fedora based distros and openSuse Tumbleweed
+- New pacman update script for Arch to enable colors, parallel downloads and ILoveCandy ~/.config/ml4w/scripts/ml4w-pacman
+- New keybinding to toggle the active window to floating and pin: SUPER+ALT+T
+- New keybinding to toggle the calendar widget: SUPER+CTRL+C
+- Quickshell Overview added. Can be toggled with CTRL+TAB
+
+Version 2.11.1
+--------------------------------------------------------
+- Compatible with Hyprland 0.54.x
+- Neovim configuration moved to own repository https://github.com/mylinuxforwork/ml4w-nvim 
+- Install the ML4W nvim configuration from the Welcome App in Settings/Options or with ~/.config/ml4w/scripts/ml4w-install-nvim
+- New default icon theme kora-pgrey
+- Switched back to Bibata Cursor Theme
+- New keybinding: SUPER+SHIFT+M to toggle between dark and light mode
+- Hyprshade replaced with Hyprsunset. Configuration in ~./config/hypr/hyprsunset.conf (can be restored for updates)
+
+Version 2.11.0
+--------------------------------------------------------
+- The SDDM script can copy the current wallpaper to SDDM and use it as a background image. Start the script with ~/.config/ml4w/scripts/ml4w-install-sddm or from the Welcome App/Settings/Display Manager
+- New installation script based on the script based ML4W Dotfiles Installer
+- New Default Wallpaper
+
+Version 2.10.1
+--------------------------------------------------------
+- ML4W Logo added to fastfetch
+- Hide fastfetch by adding a file to ~/.config/ml4w/settings/hide-fastfetch
+- Add script to install sddm and the ml4w theme based on SilentSDDM ~/.config/ml4w/scripts/ml4w-install-sddm or from the Welcome App/Settings/Display Manager
+- IMPORTANT: Started to cleanup and renaming scripts in ~/.config/ml4w/scripts/ Please make sure that all your customization target to the new file names.
+
 Version 2.10.0
 --------------------------------------------------------
 - Project renamed to ML4W OS
