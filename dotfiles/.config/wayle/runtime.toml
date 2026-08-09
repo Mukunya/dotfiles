@@ -42,6 +42,9 @@ right-click = "ulauncher-toggle"
 dropdown-lock-command = "hyprlock"
 dropdown-logout-command = "uwsm stop"
 
+[modules.hyprland-workspaces]
+app-icons-show = true
+
 [modules.netstat]
 poll-interval-ms = 1000
 
