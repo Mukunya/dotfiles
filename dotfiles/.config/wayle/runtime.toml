@@ -7,7 +7,7 @@ background-opacity = 20
 button-variant = "basic"
 
 [[bar.layout]]
-monitor = "*"
+monitor = "DP-1"
 show = true
 left = [
     "dashboard",
@@ -30,12 +30,40 @@ right = [
     "power",
 ]
 
+[[bar.layout]]
+monitor = "*"
+show = true
+left = [
+    "dashboard",
+    "hyprland-workspaces",
+    "cpu",
+    "ram",
+    "storage",
+    "netstat",
+]
+center = ["window-title"]
+right = [
+    "volume",
+    "bluetooth",
+    "network",
+    "systray",
+    "notifications",
+    "clock",
+    "power",
+]
+
 [modules.cava]
 bars = 40
 style = "wave"
 
+[modules.clock]
+format = "%a %b %d %H:%M:%S"
+dropdown-show-seconds = true
+
 [modules.cpu]
 poll-interval-ms = 200
+temp-sensor = ""
+format = "{{ percent }}% {{ temp_c }}C @{{ avg_freq_ghz }}GHz"
 
 [modules.dashboard]
 right-click = "ulauncher-toggle"
@@ -53,6 +81,10 @@ left-click = "wlogout"
 
 [modules.ram]
 poll-interval-ms = 200
+format = "{{ used_gib }}/{{ total_gib }} GiB"
+
+[modules.storage]
+format = "{{ used_gib }}/{{ total_gib }} GiB"
 
 [modules.volume]
 right-click = "pavucontrol"
