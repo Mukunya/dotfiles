@@ -1,0 +1,62 @@
+[general]
+tearing-mode = true
+
+[bar]
+scale = 0.800000011920929
+background-opacity = 20
+button-variant = "basic"
+
+[[bar.layout]]
+monitor = "*"
+show = true
+left = [
+    "dashboard",
+    "hyprland-workspaces",
+    "cpu",
+    "ram",
+    "storage",
+    "netstat",
+]
+center = ["window-title"]
+right = [
+    "media",
+    "volume",
+    "bluetooth",
+    "network",
+    "hyprsunset",
+    "systray",
+    "notifications",
+    "clock",
+    "power",
+]
+
+[modules.cava]
+bars = 40
+style = "wave"
+
+[modules.cpu]
+poll-interval-ms = 200
+
+[modules.dashboard]
+right-click = "ulauncher-toggle"
+dropdown-lock-command = "hyprlock"
+dropdown-logout-command = "uwsm stop"
+
+[modules.netstat]
+poll-interval-ms = 1000
+
+[modules.power]
+left-click = "wlogout"
+
+[modules.ram]
+poll-interval-ms = 200
+
+[modules.volume]
+right-click = "pavucontrol"
+middle-click = "helvum"
+
+[osd]
+position = "top"
+
+[wallpaper]
+engine-enabled = false
