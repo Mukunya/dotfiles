@@ -141,13 +141,16 @@ hl.config({
         numlock_by_default = true,
         follow_mouse       = 1,
         mouse_refocus      = false,
-        force_no_accel     = true,
         sensitivity        = 0,
+        accel_profile = "flat",
         touchpad = {
             natural_scroll       = false,
             scroll_factor        = 1.0,
             disable_while_typing = false,
         },
+        tablet = {
+            output = "current"
+        }
     },
 })
 
@@ -201,6 +204,7 @@ hl.config({
         },
         layout          = "dwindle",
         resize_on_border = true,
+        allow_tearing = true,
     },
 
     decoration = {
@@ -251,12 +255,14 @@ hl.config({
     },
 
     cursor = {
-        no_hardware_cursors = false,
+        min_refresh_rate = 40
     },
 
     render = {
         direct_scanout = 1,
         cm_auto_hdr    = 1,
+        send_content_type = false,
+
     },
 
     debug = {
@@ -611,4 +617,10 @@ hl.window_rule({
     name = "steam",
     match = { class = "steam" },
     workspace = 2, no_initial_focus = true,
+})
+
+hl.window_rule({
+    name = "tearing",
+    match = { fullscreen },
+    immediate = 1
 })
