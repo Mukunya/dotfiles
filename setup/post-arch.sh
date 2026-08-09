@@ -15,19 +15,13 @@ bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/ml4w-dotfiles-se
 # Cursors
 # --------------------------------------------------------------
 
-source $repo_path/setup/_cursors.sh
+source ./setup/_cursors.sh
 
 # --------------------------------------------------------------
 # Fonts
 # --------------------------------------------------------------
 
-source $repo_path/setup/_fonts.sh
-
-# --------------------------------------------------------------
-# Icons
-# --------------------------------------------------------------
-
-source $repo_path/setup/_icons.sh
+source ./setup/_fonts.sh
 
 # --------------------------------------------------------------
 # Create XDG Directories
