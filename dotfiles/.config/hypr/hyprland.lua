@@ -115,7 +115,7 @@ hl.monitor({
 
 hl.monitor({
     output   = "vnc",
-    mode     = "2880x1620@60",
+    mode     = "2560x1600@60",
     position = "0x-2000",
     scale    = 1,
 })
