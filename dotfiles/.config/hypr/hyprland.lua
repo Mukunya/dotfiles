@@ -462,10 +462,28 @@ hl.bind(mainMod .. " + SHIFT + X", hl.dsp.window.move({ workspace = "special:mag
 hl.bind(mainMod .. " + Y", hl.dsp.workspace.toggle_special("spcleft"))
 hl.bind(mainMod .. " + SHIFT + Y", hl.dsp.window.move({ workspace = "special:spcleft" }))
 
+-- Volume
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"), { repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), { repeating = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
+hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"))
+
+-- Brightness
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("monitorctl b -i 10"), { repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("monitorctl b -d 10"), { repeating = true })
+
 hl.bind("XF86Calculator", function()
     hl.timer(function()
-        hl.dispatch(hl.dsp.dpms({ action = "toggle", monitor = "HDMI-A-3" }))
-        hl.dispatch(hl.dsp.dpms({ action = "toggle", monitor = "HDMI-A-4" }))
+        local samsung1 = "desc:Samsung Electric Company S24F350 H4ZN718035"
+        local samsung2 = "desc:Samsung Electric Company S24F350 H4ZN800216"
+
+        if hl.get_monitor(samsung1) ~= nil then
+            hl.dispatch(hl.dsp.dpms({ action = "toggle", monitor = samsung1 }))
+        end
+
+        if hl.get_monitor(samsung2) ~= nil then
+            hl.dispatch(hl.dsp.dpms({ action = "toggle", monitor = samsung2 }))
+        end
     end, { timeout = 1000, type = "oneshot" })
 end)
 
