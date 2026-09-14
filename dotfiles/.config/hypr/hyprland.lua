@@ -114,6 +114,15 @@ hl.monitor({
 })
 
 hl.monitor({
+    output   = "eDP-1",
+    mode     = "2560x1600@60",
+    position = "0x0",
+    scale    = 1.25,
+    bitdepth = 10,
+    cm       = "dcip3",
+})
+
+hl.monitor({
     output   = "vnc",
     mode     = "1920x1080@100",
     position = "0x-2000",
@@ -144,15 +153,28 @@ hl.config({
         sensitivity        = 0,
         accel_profile = "flat",
         touchpad = {
-            natural_scroll       = false,
-            scroll_factor        = 1.0,
+            natural_scroll       = true,
+            scroll_factor        = .7,
             disable_while_typing = false,
+            tap_to_click         = true,
+            drag_lock            = true,
+            clickfinger_behavior = true,
+            drag_3fg = true
         },
+        
         tablet = {
             output = "current"
         }
     },
+    gestures = {
+        workspace_swipe_direction_lock = false,
+        workspace_swipe_distance = 500,
+        workspace_swipe_cancel_ratio = .3
+    }
 })
+
+
+hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
 
 ------------------------------------------------------------
 ---- AUTOSTART ----
@@ -170,17 +192,20 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("uwsm app -- ~/.config/hypr/scripts/gtk.sh")
     hl.exec_cmd("uwsm app -- hypridle")
     hl.exec_cmd("uwsm app -- wl-paste --watch cliphist store")
-    hl.exec_cmd("uwsm app -- ~/.config/ml4w/scripts/ml4w-autostart.sh")
     hl.exec_cmd("uwsm app -- ~/.config/hypr/scripts/cleanup.sh")
     hl.exec_cmd("uwsm app -- wayle shell")
-    hl.exec_cmd("uwsm app -- hyprctl output create headless vnc")
-    hl.exec_cmd("uwsm app -- wayvnc -g -o vnc 0.0.0.0")
-    hl.exec_cmd("uwsm app -- ~/.config/wayvnc/event-watcher.sh")
     hl.exec_cmd("ulauncher")
-    hl.exec_cmd("uwsm app -- ~/.config/pipewire/scripts/volumecontrol.py")
-    hl.exec_cmd("uwsm app -- hyprpm reload")
-    hl.exec_cmd("sunshine")
-    hl.exec_cmd("pidof hyprlock || hyprlock")
+    if hl.get_monitor("eDP-1") ~= nil then
+        hl.exec_cmd("uwsm app -- hyprctl output create headless vnc")
+        hl.exec_cmd("uwsm app -- wayvnc -g -o vnc 0.0.0.0")
+        hl.exec_cmd("uwsm app -- ~/.config/wayvnc/event-watcher.sh")
+        hl.exec_cmd("uwsm app -- ~/.config/pipewire/scripts/volumecontrol.py")
+        hl.exec_cmd("uwsm app -- hyprpm reload")
+        hl.exec_cmd("sunshine")
+        hl.exec_cmd("pidof hyprlock || hyprlock")
+    else
+        hl.exec_cmd("~/.local/bin/auto-brightness")
+    end
 end)
 
 -- Plain `exec` (re-run on every config reload, unlike exec-once):
@@ -312,17 +337,47 @@ hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 3,  bezier = "
 ---- WORKSPACE RULES ----
 ------------------------------------------------------------
 -- https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
+-- Assign workspaces to their "home" monitor if it's connected,
+-- otherwise fall back to the laptop panel so nothing gets orphaned.
 
-hl.workspace_rule({ workspace = 1,  monitor = "desc:LG Electronics LG HDR 4K 0x0004B7BD", default = true })
-hl.workspace_rule({ workspace = 2,  monitor = "desc:LG Electronics LG HDR 4K 0x0004B7BD" })
-hl.workspace_rule({ workspace = 3,  monitor = "desc:LG Electronics LG HDR 4K 0x0004B7BD" })
-hl.workspace_rule({ workspace = 4,  monitor = "desc:Samsung Electric Company S24F350 H4ZN718035", default = true })
-hl.workspace_rule({ workspace = 5,  monitor = "desc:Samsung Electric Company S24F350 H4ZN800216", default = true })
-hl.workspace_rule({ workspace = 10, monitor = "desc:LG Electronics LG HDR 4K 0x0004B7BD" })
+local LG       = "desc:LG Electronics LG HDR 4K 0x0004B7BD"
+local SAMSUNG_A = "desc:Samsung Electric Company S24F350 H4ZN718035"
+local SAMSUNG_B = "desc:Samsung Electric Company S24F350 H4ZN800216"
+local LAPTOP    = "eDP-1"
+
+local function monitor_for(preferred)
+    if hl.get_monitor(preferred) ~= nil then
+        return preferred
+    elseif hl.get_monitor(LAPTOP) ~= nil then
+        return LAPTOP
+    elseif hl.get_monitor("vnc") ~= nil then
+        return "vnc"
+    end
+    return nil -- nothing connected at all: let Hyprland auto-assign
+end
+
+local function workspace_rule_safe(opts)
+    if opts.monitor == nil then
+        opts.monitor = nil -- drop the key entirely so hl.workspace_rule doesn't get monitor=nil explicitly
+        hl.workspace_rule(opts)
+    else
+        hl.workspace_rule(opts)
+    end
+end
+
+workspace_rule_safe({ workspace = 1,  monitor = monitor_for(LG),       default = true })
+workspace_rule_safe({ workspace = 2,  monitor = monitor_for(LG) })
+workspace_rule_safe({ workspace = 3,  monitor = monitor_for(LG) })
+workspace_rule_safe({ workspace = 4,  monitor = monitor_for(SAMSUNG_A), default = true })
+workspace_rule_safe({ workspace = 5,  monitor = monitor_for(SAMSUNG_B), default = true })
+workspace_rule_safe({ workspace = 10, monitor = monitor_for(LG) })
 
 -- "Smart gaps" / no gaps when only one window
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]",   gaps_out = 0, gaps_in = 0 })
+
+hl.on("monitor.added", function() hl.exec_cmd("hyprctl reload") end)
+hl.on("monitor.removed", function() hl.exec_cmd("hyprctl reload") end)
 
 ------------------------------------------------------------
 ---- PLUGINS ----
@@ -468,9 +523,22 @@ hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"))
 
+--Media
+
+hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"))
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"))
+hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))
+hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
+hl.bind("XF86AudioStop", hl.dsp.exec_cmd("playerctl stop"))
+
 -- Brightness
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("monitorctl b -i 10"), { repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("monitorctl b -d 10"), { repeating = true })
+if hl.get_monitor("eDP-1") ~= nil then
+    hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set +5%"), { repeating = true })
+    hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"), { repeating = true })
+else
+    hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("monitorctl b -i 10"), { repeating = true })
+    hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("monitorctl b -d 10"), { repeating = true })
+end
 
 hl.bind("XF86Calculator", function()
     hl.timer(function()

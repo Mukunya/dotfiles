@@ -1,0 +1,266 @@
+#!/usr/bin/env python3
+"""
+auto-brightness — Ambient Light Sensor auto-brightness for Asahi Linux
+
+Controls display brightness using `brightnessctl`, making it compatible with
+desktop environments like Hyprland/Wayland. Reads lux directly from the IIO
+sensor sysfs node for low latency.
+
+Architecture:
+  - brightnessctl CLI: Queries current/max values and applies step changes
+  - Dynamic scaling: Calculates step size (0.5%) and min brightness (2%)
+    based on the display's hardware max brightness
+  - One brightness step per poll cycle: imperceptible transitions
+  - Manual override: respects user adjustments until ambient light shifts
+    by ≥75% (or ≥5 lux absolute in dark conditions)
+  - Reads lux directly from IIO sysfs (no iio-sensor-proxy dependency)
+
+Designed for Apple Silicon laptops running Asahi Linux with the VD6286
+ALS sensor driven by the aop_als kernel module.
+
+Usage:
+  auto-brightness                               # run in foreground
+  systemctl --user start auto-brightness       # via systemd
+
+Requires:
+  - Kernel with aop_als module (IIO ALS sensor)
+  - brightnessctl (installed via system package manager)
+"""
+
+import os
+import signal
+import subprocess
+import sys
+import time
+
+# ---------------------------------------------------------------------------
+# Hardware paths
+# ---------------------------------------------------------------------------
+
+SENSOR_FILE = None  # auto-detected at startup
+
+# ---------------------------------------------------------------------------
+# Brightness control constants (calculated dynamically at runtime)
+# ---------------------------------------------------------------------------
+
+MAX_BRIGHTNESS = 10000
+MIN_BRIGHTNESS = 200
+SMOOTH_STEP = 50
+
+# Tuning constants
+POLL_INTERVAL = 0.25        # seconds between sensor reads
+
+LUX_CHANGE_PCT = 40         # % lux change to resume after manual override
+LUX_CHANGE_MIN = 2          # absolute lux change minimum (for dark conditions)
+
+# Lux → brightness % curve (linearly interpolated)
+LUX_CURVE = [
+    (0,     2),
+    (1,     5),
+    (5,     10),
+    (20,   24),
+    (50,   32),
+    (100,  50),
+    (200,  75),
+    (400,  80),
+    (700,  92),
+    (1000, 100),
+]
+
+# ---------------------------------------------------------------------------
+# brightnessctl helpers
+# ---------------------------------------------------------------------------
+
+def get_max_brightness():
+    """Read max brightness via brightnessctl."""
+    try:
+        res = subprocess.check_output(["brightnessctl", "max"], text=True)
+        return int(res.strip())
+    except Exception:
+        return 10000
+
+
+def bctl_get():
+    """Read current brightness via brightnessctl (returns int or None)."""
+    try:
+        res = subprocess.check_output(["brightnessctl", "get"], text=True)
+        return int(res.strip())
+    except Exception:
+        return None
+
+
+def bctl_set(val):
+    """Set brightness via brightnessctl."""
+    val = max(MIN_BRIGHTNESS, min(int(val), MAX_BRIGHTNESS))
+    try:
+        subprocess.run(
+            ["brightnessctl", "set", str(val)],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        subprocess.run(
+            ["brightnessctl","--device=kbd_backlight", "set", str(val)],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except Exception:
+        pass
+
+# ---------------------------------------------------------------------------
+# Sysfs lux reader
+# ---------------------------------------------------------------------------
+
+def read_lux():
+    """Read lux from IIO sensor sysfs (returns int or None)."""
+    try:
+        with open(SENSOR_FILE, "r") as f:
+            return int(f.read().strip())
+    except Exception:
+        return None
+
+# ---------------------------------------------------------------------------
+# Lux → brightness mapping
+# ---------------------------------------------------------------------------
+
+def lux_to_brightness(lux):
+    """Map a lux value to raw brightness units via LUX_CURVE."""
+    if lux <= LUX_CURVE[0][0]:
+        pct = LUX_CURVE[0][1]
+    elif lux >= LUX_CURVE[-1][0]:
+        pct = LUX_CURVE[-1][1]
+    else:
+        pct = 50
+        for i in range(len(LUX_CURVE) - 1):
+            l0, b0 = LUX_CURVE[i]
+            l1, b1 = LUX_CURVE[i + 1]
+            if l0 <= lux <= l1:
+                t = (lux - l0) / (l1 - l0)
+                pct = b0 + t * (b1 - b0)
+                break
+    return max(
+        MIN_BRIGHTNESS,
+        min(MAX_BRIGHTNESS, int(round(pct / 100.0 * MAX_BRIGHTNESS))),
+    )
+
+# ---------------------------------------------------------------------------
+# Manual override detection
+# ---------------------------------------------------------------------------
+
+def lux_changed_enough(current_lux, override_lux):
+    """Check if ambient light has changed enough to resume auto-brightness."""
+    delta = abs(current_lux - override_lux)
+    if delta < LUX_CHANGE_MIN:
+        return False
+    if override_lux == 0:
+        return True
+    return (delta * 100 / override_lux) >= LUX_CHANGE_PCT
+
+# ---------------------------------------------------------------------------
+# Main loop
+# ---------------------------------------------------------------------------
+
+def find_sensor():
+    """Auto-detect the IIO ALS sensor path (device number varies across boots)."""
+    import glob
+    for dev in sorted(glob.glob("/sys/bus/iio/devices/iio:device*")):
+        name_file = os.path.join(dev, "name")
+        lux_file = os.path.join(dev, "in_illuminance_input")
+        if os.path.exists(lux_file):
+            name = ""
+            try:
+                with open(name_file) as f:
+                    name = f.read().strip()
+            except Exception:
+                pass
+            return lux_file, name
+    return None, None
+
+def main():
+    global SENSOR_FILE, MAX_BRIGHTNESS, MIN_BRIGHTNESS, SMOOTH_STEP
+
+    sensor_path, sensor_name = find_sensor()
+    if sensor_path is None:
+        print("auto-brightness: no IIO illuminance sensor found", flush=True)
+        sys.exit(1)
+    SENSOR_FILE = sensor_path
+    print(f"auto-brightness: found sensor '{sensor_name}' at {sensor_path}", flush=True)
+
+    # Fetch max brightness and adjust dynamic thresholds
+    MAX_BRIGHTNESS = get_max_brightness()
+    MIN_BRIGHTNESS = max(1, int(MAX_BRIGHTNESS * 0.02))  # 2% floor
+    SMOOTH_STEP = max(1, int(MAX_BRIGHTNESS * 0.005))    # 0.5% per cycle step
+
+    current = bctl_get()
+    if current is None:
+        print("auto-brightness: cannot read brightness via brightnessctl, exiting", flush=True)
+        sys.exit(1)
+
+    print(f"auto-brightness: using brightnessctl, "
+          f"max={MAX_BRIGHTNESS}, step={SMOOTH_STEP}, poll={POLL_INTERVAL}s, "
+          f"initial={current}/{MAX_BRIGHTNESS}", flush=True)
+
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
+    signal.signal(signal.SIGINT, lambda *_: sys.exit(0))
+
+    last_set = current          # what WE last set via brightnessctl
+    manual_override = False
+    override_lux = 0
+    idle_cycles = 0             # how many cycles we've been at target
+
+    while True:
+        time.sleep(POLL_INTERVAL)
+
+        lux = read_lux()
+        if lux is None:
+            continue
+
+        target = lux_to_brightness(lux)
+
+        # Only check for manual override when idle (at target for a while).
+        if idle_cycles >= 4:
+            actual = bctl_get()
+            if actual is not None and abs(actual - last_set) > SMOOTH_STEP:
+                if not manual_override:
+                    print(f"auto-brightness: manual override detected "
+                          f"(ours={last_set}, actual={actual})", flush=True)
+                manual_override = True
+                override_lux = lux
+                current = actual
+                last_set = actual
+                idle_cycles = 0
+                continue
+
+        # In manual override: wait for significant lux change
+        if manual_override:
+            if lux_changed_enough(lux, override_lux):
+                actual = bctl_get()
+                if actual is not None:
+                    current = actual
+                    last_set = actual
+                manual_override = False
+                print(f"auto-brightness: resuming at {current}/{MAX_BRIGHTNESS} "
+                      f"(lux {override_lux}->{lux})", flush=True)
+            else:
+                continue
+
+        # Already at target: count idle cycles
+        if current == target:
+            idle_cycles = min(idle_cycles + 1, 100)
+            continue
+
+        # Actively ramping: reset idle counter
+        idle_cycles = 0
+
+        if current < target:
+            current = min(current + SMOOTH_STEP, target)
+        else:
+            current = max(current - SMOOTH_STEP, target)
+
+        bctl_set(current)
+        last_set = current
+
+
+if __name__ == "__main__":
+    main()

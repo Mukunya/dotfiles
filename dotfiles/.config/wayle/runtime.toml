@@ -7,7 +7,7 @@ background-opacity = 20
 button-variant = "basic"
 
 [[bar.layout]]
-monitor = "DP-1"
+monitor = "*"
 show = true
 left = [
     "dashboard",
@@ -23,32 +23,12 @@ right = [
     "volume",
     "bluetooth",
     "network",
+    "brightness",
     "hyprsunset",
     "systray",
     "notifications",
     "clock",
-    "power",
-]
-
-[[bar.layout]]
-monitor = "*"
-show = true
-left = [
-    "dashboard",
-    "hyprland-workspaces",
-    "cpu",
-    "ram",
-    "storage",
-    "netstat",
-]
-center = ["window-title"]
-right = [
-    "volume",
-    "bluetooth",
-    "network",
-    "systray",
-    "notifications",
-    "clock",
+    "battery",
     "power",
 ]
 
@@ -71,6 +51,7 @@ dropdown-lock-command = "hyprlock"
 dropdown-logout-command = "uwsm stop"
 
 [modules.hyprland-workspaces]
+min-workspace-count = 3
 app-icons-show = true
 
 [modules.netstat]
