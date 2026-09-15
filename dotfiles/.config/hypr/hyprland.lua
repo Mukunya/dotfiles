@@ -78,40 +78,12 @@ local tertiary_container            = "rgba(5a3d59ff)"
 local tertiary_fixed                = "rgba(fed7f9ff)"
 local tertiary_fixed_dim            = "rgba(e1bbddff)"
 
+
+hl.exec_cmd("hyprpm reload")
 ------------------------------------------------------------
 ---- MONITORS ----
 ------------------------------------------------------------
 -- https://wiki.hypr.land/Configuring/Basics/Monitors/
-
-hl.monitor({
-    output   = "desc:LG Electronics LG HDR 4K 0x0004B7BD",
-    mode     = "3840x2160@60.0",
-    position = "0x0",
-    scale    = 1.5,
-    bitdepth = 10,
-    vrr      = true,
-    cm       = "dcip3",
-})
-
-hl.monitor({
-    output   = "desc:Samsung Electric Company S24F350 H4ZN800216",
-    mode     = "1920x1080@72.0",
-    position = "2560x180",
-    scale    = 1.0,
-    bitdepth = 10,
-    vrr      = true,
-    cm       = "dcip3",
-})
-
-hl.monitor({
-    output   = "desc:Samsung Electric Company S24F350 H4ZN718035",
-    mode     = "1920x1080@72.0",
-    position = "-1920x180",
-    scale    = 1.0,
-    bitdepth = 10,
-    vrr      = true,
-    cm       = "dcip3",
-})
 
 hl.monitor({
     output   = "eDP-1",
@@ -121,14 +93,42 @@ hl.monitor({
     bitdepth = 10,
     cm       = "dcip3",
 })
+    hl.monitor({
+        output   = "desc:LG Electronics LG HDR 4K 0x0004B7BD",
+        mode     = "3840x2160@60.0",
+        position = "auto-right",
+        scale    = 1.5,
+        bitdepth = 10,
+        vrr      = true,
+        cm       = "dcip3",
+    })
 
-hl.monitor({
-    output   = "vnc",
-    mode     = "1920x1080@100",
-    position = "0x-2000",
-    scale    = 1,
-})
+    hl.monitor({
+        output   = "desc:Samsung Electric Company S24F350 H4ZN800216",
+        mode     = "1920x1080@72.0",
+        position = "2560x180",
+        scale    = 1.0,
+        bitdepth = 10,
+        vrr      = true,
+        cm       = "dcip3",
+    })
 
+    hl.monitor({
+        output   = "desc:Samsung Electric Company S24F350 H4ZN718035",
+        mode     = "1920x1080@72.0",
+        position = "-1920x180",
+        scale    = 1.0,
+        bitdepth = 10,
+        vrr      = true,
+        cm       = "dcip3",
+    })
+
+    hl.monitor({
+        output   = "vnc",
+        mode     = "1920x1080@100",
+        position = "0x-2000",
+        scale    = 1,
+    })
 -- Fallback rule for anything unmatched above
 hl.monitor({
     output   = "",
@@ -183,6 +183,41 @@ hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
 -- exec-once -> hook the "hyprland.start" event, fires once per session.
 -- Inside the callback, use hl.exec_cmd(...) directly (not through hl.dispatch).
 
+local function gdm_autologin_enabled()
+    local paths = { "/etc/gdm/custom.conf", "/etc/gdm3/custom.conf" }
+    for _, path in ipairs(paths) do
+        local f = io.open(path, "r")
+        if f then
+            local in_daemon_section = false
+            for line in f:lines() do
+                local trimmed = line:match("^%s*(.-)%s*$")
+                if trimmed:match("^%[.-%]$") then
+                    in_daemon_section = (trimmed:lower() == "[daemon]")
+                elseif in_daemon_section then
+                    local key, val = trimmed:match("^(%a[%w_]*)%s*=%s*(.-)%s*$")
+                    if key and key:lower() == "automaticloginenable" then
+                        f:close()
+                        print(val:lower() == "true")
+                        return val:lower() == "true"
+                    end
+                end
+            end
+            f:close()
+            print("false")
+            return false -- file exists but no AutomaticLoginEnable=true found
+        end
+    end
+    print("false")
+    return false -- no gdm config found at all
+end
+
+if gdm_autologin_enabled() then
+    -- e.g. skip an extra lock-on-start, since GDM already bypassed the login prompt
+    hl.on("hyprland.start", function()
+        hl.exec_cmd("pidof hyprlock || hyprlock")
+    end)
+end
+
 hl.on("hyprland.start", function()
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
     hl.exec_cmd("uwsm app -- ~/.config/ml4w/listeners.sh --startall")
@@ -195,17 +230,12 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("uwsm app -- ~/.config/hypr/scripts/cleanup.sh")
     hl.exec_cmd("uwsm app -- wayle shell")
     hl.exec_cmd("ulauncher")
-    if hl.get_monitor("eDP-1") ~= nil then
-        hl.exec_cmd("uwsm app -- hyprctl output create headless vnc")
-        hl.exec_cmd("uwsm app -- wayvnc -g -o vnc 0.0.0.0")
-        hl.exec_cmd("uwsm app -- ~/.config/wayvnc/event-watcher.sh")
-        hl.exec_cmd("uwsm app -- ~/.config/pipewire/scripts/volumecontrol.py")
-        hl.exec_cmd("uwsm app -- hyprpm reload")
-        hl.exec_cmd("sunshine")
-        hl.exec_cmd("pidof hyprlock || hyprlock")
-    else
-        hl.exec_cmd("~/.local/bin/auto-brightness")
-    end
+    hl.exec_cmd("uwsm app -- hyprctl output create headless vnc")
+    hl.exec_cmd("uwsm app -- wayvnc -g -o vnc 0.0.0.0")
+    hl.exec_cmd("uwsm app -- ~/.config/wayvnc/event-watcher.sh")
+    hl.exec_cmd("uwsm app -- ~/.config/pipewire/scripts/volumecontrol.py")
+    hl.exec_cmd("sunshine")
+    hl.exec_cmd("uwsm app -- ~/.local/bin/auto-brightness")
 end)
 
 -- Plain `exec` (re-run on every config reload, unlike exec-once):
