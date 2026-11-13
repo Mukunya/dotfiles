@@ -117,7 +117,7 @@ hl.monitor({
     output   = "vnc",
     mode     = "2560x1600@60",
     position = "0x-2000",
-    scale    = 1,
+    scale    = 1.5,
 })
 
 -- Fallback rule for anything unmatched above
@@ -641,4 +641,14 @@ hl.window_rule({
     name = "tearing",
     match = { fullscreen },
     immediate = 1
+})
+
+
+hl.device({
+    name    = "logitech-wireless-receiver-mouse",
+    enabled = false,
+})
+hl.device({
+    name    = "keychron--keychron-link--keyboard",
+    enabled = false,
 })

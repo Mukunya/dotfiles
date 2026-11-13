@@ -62,7 +62,6 @@ dropdown-show-seconds = true
 
 [modules.cpu]
 poll-interval-ms = 200
-temp-sensor = ""
 format = "{{ percent }}% {{ temp_c }}C @{{ avg_freq_ghz }}GHz"
 
 [modules.dashboard]
