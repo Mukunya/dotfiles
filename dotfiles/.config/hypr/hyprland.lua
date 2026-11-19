@@ -160,7 +160,7 @@ hl.config({
 -- https://wiki.hypr.land/Configuring/Basics/Autostart/
 -- exec-once -> hook the "hyprland.start" event, fires once per session.
 -- Inside the callback, use hl.exec_cmd(...) directly (not through hl.dispatch).
-
+hl.plugin.load("/etc/hypr-plugins/hyprbars.so")
 hl.on("hyprland.start", function()
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
     hl.exec_cmd("uwsm app -- ~/.config/ml4w/listeners.sh --startall")
@@ -170,16 +170,15 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("uwsm app -- ~/.config/hypr/scripts/gtk.sh")
     hl.exec_cmd("uwsm app -- hypridle")
     hl.exec_cmd("uwsm app -- wl-paste --watch cliphist store")
-    hl.exec_cmd("uwsm app -- ~/.config/ml4w/scripts/ml4w-autostart.sh")
     hl.exec_cmd("uwsm app -- ~/.config/hypr/scripts/cleanup.sh")
     hl.exec_cmd("uwsm app -- wayle shell")
     hl.exec_cmd("uwsm app -- hyprctl output create headless vnc")
     hl.exec_cmd("uwsm app -- wayvnc -g -o vnc 0.0.0.0")
-    hl.exec_cmd("uwsm app -- ~/.config/wayvnc/event-watcher.sh")
+    --hl.exec_cmd("uwsm app -- ~/.config/wayvnc/event-watcher.sh")
     hl.exec_cmd("ulauncher")
     hl.exec_cmd("uwsm app -- ~/.config/pipewire/scripts/volumecontrol.py")
     hl.exec_cmd("uwsm app -- hyprpm reload")
-    hl.exec_cmd("sunshine")
+    --hl.exec_cmd("sunshine")
     hl.exec_cmd("pidof hyprlock || hyprlock")
 end)
 

@@ -13,7 +13,7 @@
 # By Affan Mustafa 2025
 #___________________________________________________________________________________________________
 
-#!/bin/bash
+#!/usr/bin/env bash
 
 VISIBLE_MIN=10
 SCROLL_FILE="$HOME/.cache/nowplaying_scroll_pos"
