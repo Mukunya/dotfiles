@@ -428,6 +428,7 @@ hl.bind("ALT + Tab", hl.dsp.window.cycle_next(), { repeating = true })
 hl.bind("ALT + Tab", hl.dsp.window.bring_to_top(), { repeating = true })
 
 hl.bind(mainMod .. " + CTRL + R", hl.dsp.exec_cmd("hyprctl reload"))
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("hyprland-run"))
 hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd(HYPRSCRIPTS .. "/toggle-animations.sh"))
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd("uwsm app -- " .. HYPRSCRIPTS .. "/screenshot.sh"))
 hl.bind(mainMod .. " + ALT + F", hl.dsp.exec_cmd("uwsm app -- " .. HYPRSCRIPTS .. "/screenshot.sh --instant"))
